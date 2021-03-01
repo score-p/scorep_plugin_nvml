@@ -1,0 +1,3 @@
+build
+.idea
+include/nvml.h
