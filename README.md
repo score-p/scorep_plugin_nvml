@@ -7,7 +7,7 @@ If not present on your system get NVML from [NVIDIA Management Library (NVML)](h
 and setup paths
 
 ```
-git clone --recurse-submodules git@github.com:NanoNabla/scorep_plugin_nvml.git
+git clone --recurse-submodules git@github.com:score-p/scorep_plugin_nvml.git
 cd scorep_plugin_nvml
 mkdir build && cd build
 cmake ../
