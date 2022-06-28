@@ -327,6 +327,64 @@ public:
     }
 };
 
+class Freq_Mem : public Nvml_Metric {
+public:
+    Freq_Mem(std::string name_ = "")
+    {
+        name = name_;
+        desc = "Memory frequency";
+        unit = "MHz";
+        type = metric_measure_type::ABS;
+        datatype = metric_datatype::UINT;
+    }
+    unsigned int get_value(nvmlDevice_t& device)
+    {
+        nvmlReturn_t ret = nvmlDeviceGetApplicationsClock(device, NVML_CLOCK_MEM, &value);
+        check_nvml_return(ret, name);
+
+        return value;
+    }
+};
+
+class Freq_Sm : public Nvml_Metric {
+public:
+    Freq_Sm(std::string name_ = "")
+    {
+        name = name_;
+        desc = "SM frequency";
+        unit = "MHz";
+        type = metric_measure_type::ABS;
+        datatype = metric_datatype::UINT;
+    }
+    unsigned int get_value(nvmlDevice_t& device)
+    {
+        nvmlReturn_t ret = nvmlDeviceGetApplicationsClock(device, NVML_CLOCK_SM, &value);
+        check_nvml_return(ret, name);
+
+        return value;
+    }
+};
+
+class Freq_Graphics : public Nvml_Metric {
+public:
+    Freq_Graphics(std::string name_ = "")
+    {
+        name = name_;
+        desc = "Graphics frequency";
+        unit = "MHz";
+        type = metric_measure_type::ABS;
+        datatype = metric_datatype::UINT;
+    }
+    unsigned int get_value(nvmlDevice_t& device)
+    {
+        nvmlReturn_t ret =
+            nvmlDeviceGetApplicationsClock(device, NVML_CLOCK_GRAPHICS, &value);
+        check_nvml_return(ret, name);
+
+        return value;
+    }
+};
+
 class Nvml_Sampling_Metric {
 public:
     virtual ~Nvml_Sampling_Metric()
@@ -524,6 +582,15 @@ Nvml_Metric* metric_name_2_nvml_function(std::string metric_name)
     }
     else if (metric_name.compare("utilization_mem") == 0) {
         metric = new Utilization_Mem(metric_name);
+    }
+    else if (metric_name.compare("freq_sm") == 0) {
+        metric = new Freq_Sm(metric_name);
+    }
+    else if (metric_name.compare("freq_mem") == 0) {
+        metric = new Freq_Mem(metric_name);
+    }
+    else if (metric_name.compare("freq_graphics") == 0) {
+        metric = new Freq_Graphics(metric_name);
     }
     else {
         std::runtime_error("Unknown metric: " + metric_name);

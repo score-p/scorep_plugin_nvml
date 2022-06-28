@@ -19,7 +19,7 @@ make
 
 ## Usage
 Sampling plugin seems to be more efficient than async (which samples via polling) or sync plugin but supports less
-metrics. It uses special buffers on the GPU which continuesly sample.
+metrics. It uses special buffers on the GPU which continuously sample.
 
 > The advantage of using this method for samples in contrast to polling via existing methods is to get get higher frequency data at lower polling cost. 
 > -- <cite>[NVML Docs](https://docs.nvidia.com/deploy/nvml-api/group__nvmlDeviceQueries.html#group__nvmlDeviceQueries_1gb7d2a6d2a9b4584cd985765d1ff46c94) </cite>
@@ -73,7 +73,9 @@ The a sync plugin polls devices on trace events (e.g. `ENTER` and `LEAVE`) to ge
 - `temperature`
 - `utilization_gpu`
 - `utilization_mem`
-
+- `freq_sm`
+- `freq_mem`
+- `freq_graphics`
 
 ## Developer note 
 Current `nvml.h` can be found under 
