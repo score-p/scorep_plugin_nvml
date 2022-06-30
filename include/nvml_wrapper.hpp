@@ -385,6 +385,25 @@ public:
     }
 };
 
+class ThrottlingReasons : public Nvml_Metric {
+public:
+    ThrottlingReasons(std::string name_ = "")
+    {
+        name = name_;
+        desc = "Clocks throttling reasons";
+        unit = "bitmap";
+        type = metric_measure_type::ABS;
+        datatype = metric_datatype::UINT;
+    }
+    unsigned int get_value(nvmlDevice_t& device)
+    {
+        nvmlReturn_t ret = nvmlDeviceGetCurrentClocksThrottleReasons(device, &value);
+        check_nvml_return(ret, name);
+
+        return value;
+    }
+};
+
 class Nvml_Sampling_Metric {
 public:
     virtual ~Nvml_Sampling_Metric()
@@ -591,6 +610,9 @@ Nvml_Metric* metric_name_2_nvml_function(std::string metric_name)
     }
     else if (metric_name.compare("freq_graphics") == 0) {
         metric = new Freq_Graphics(metric_name);
+    }
+    else if (metric_name.compare("throttle") == 0) {
+        metric = new ThrottlingReasons(metric_name);
     }
     else {
         std::runtime_error("Unknown metric: " + metric_name);
