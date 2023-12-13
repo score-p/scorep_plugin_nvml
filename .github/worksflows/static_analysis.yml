@@ -1,0 +1,13 @@
+name: Static analysis
+on: [push, pull_request]
+
+jobs:
+  Cpp:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Formatting
+      uses: Flamefire/clang-format-lint-action@master
+      with:
+        source: src
+        clangFormatVersion: 9
