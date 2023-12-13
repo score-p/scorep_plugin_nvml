@@ -58,7 +58,7 @@ Optional :
 ### Sync Plugin
 
 The a sync plugin polls devices on trace events (e.g. `ENTER` and `LEAVE`) to get the current value.
-- `SCOREP_METRIC_PLUGINS=nvml_plugin` 
+- `SCOREP_METRIC_PLUGINS=nvml_sync_plugin` 
 - `SCOREP_METRIC_NVML_SYNC_PLUGIN="utilization_gpu,power_usage"`
 
 #### Available metrics
