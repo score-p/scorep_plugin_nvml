@@ -1,0 +1,32 @@
+name: Build tests
+on: [push, pull_request, workflow_dispatch]
+
+env:
+  SCOREP_TIMER: clock_gettime # tsc causes warnings
+  RDMAV_FORK_SAFE: 
+  IBV_FORK_SAFE: 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Add NVML
+      run: sudo apt-get -y install libnvidia-ml-dev
+    
+    - name: Add Score-P repo
+      run: sudo add-apt-repository ppa:andreasgocht/scorep
+    
+    - name: Install Score-P      
+      run: sudo apt-get -y install scorep
+
+    - name: Setup environment
+      run: echo "$HOME/scorep/bin" >> $GITHUB_PATH
+
+    - name: Build plugin
+      uses: threeal/cmake-action@v1.3.0
+      with:
+        run-build: true
+        run-test: false
