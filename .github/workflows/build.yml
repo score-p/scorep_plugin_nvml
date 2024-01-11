@@ -17,10 +17,10 @@ jobs:
       run: sudo apt-get -y install libnvidia-ml-dev
     
     - name: Add Score-P repo
-      run: sudo add-apt-repository ppa:andreasgocht/scorep
+      run: sudo add-apt-repository ppa:score-p/scorep
     
     - name: Install Score-P      
-      run: sudo apt-get -y install scorep
+      run: sudo apt-get -y install libunwind-dev scorep
 
     - name: Setup environment
       run: echo "$HOME/scorep/bin" >> $GITHUB_PATH
