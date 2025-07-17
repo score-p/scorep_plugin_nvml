@@ -245,6 +245,30 @@ public:
     }
 };
 
+class Module_Power_Instant : public Nvml_Metric {
+public:
+    Module_Power_Instant(std::string name_ = "")
+    {
+        name = name_;
+        desc = "Module Instant Power";
+        unit = "mW";
+        type = metric_measure_type::ABS;
+        datatype = metric_datatype::UINT;
+    }
+    unsigned int get_value(nvmlDevice_t& device)
+    {
+        nvmlFieldValue_t field_value;
+        field_value.fieldId = NVML_FI_DEV_POWER_INSTANT;
+        field_value.scopeId = 1;
+        nvmlDeviceGetFieldValues(device, 1, &field_value);
+        check_nvml_return(field_value.nvmlReturn, name);
+
+        value = field_value.value.ulVal;
+
+        return value;
+    }
+};
+
 class Pcie_Send : public Nvml_Metric {
 public:
     Pcie_Send(std::string name_ = "")
@@ -591,6 +615,9 @@ Nvml_Metric* metric_name_2_nvml_function(std::string metric_name)
     }
     else if (metric_name.compare("freq_graphics") == 0) {
         metric = new Freq_Graphics(metric_name);
+    }
+    else if (metric_name.compare("module_power_instant") == 0) {
+        metric = new Module_Power_Instant(metric_name);
     }
     else {
         std::runtime_error("Unknown metric: " + metric_name);
