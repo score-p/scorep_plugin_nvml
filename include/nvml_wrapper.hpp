@@ -254,9 +254,13 @@ public:
         unit = "mW";
         type = metric_measure_type::ABS;
         datatype = metric_datatype::UINT;
+#ifndef NVML_FI_DEV_POWER_INSTANT
+        throw std::runtime_error("NVML_FI_DEV_POWER_INSTANT not available in this NVML version.");
+#endif
     }
     unsigned int get_value(nvmlDevice_t& device)
     {
+#ifdef NVML_FI_DEV_POWER_INSTANT
         nvmlFieldValue_t field_value;
         field_value.fieldId = NVML_FI_DEV_POWER_INSTANT;
         field_value.scopeId = 1;
@@ -264,7 +268,9 @@ public:
         check_nvml_return(field_value.nvmlReturn, name);
 
         value = field_value.value.ulVal;
-
+#else
+        value = 0;
+#endif
         return value;
     }
 };

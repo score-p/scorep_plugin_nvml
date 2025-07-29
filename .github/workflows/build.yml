@@ -11,13 +11,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
+
+    - name: Install CUDA compiler
+      uses: Jimver/cuda-toolkit@v0.2.26
+      with:
+        cuda: '12.8.0'
+        method: network
+        sub-packages: '["nvcc"]'
 
     - name: Add NVML
       run: sudo apt-get -y install libnvidia-ml-dev
     
     - name: Add Score-P repo
-      run: sudo add-apt-repository ppa:score-p/scorep
+      run: sudo add-apt-repository ppa:score-p/releases
     
     - name: Install Score-P      
       run: sudo apt-get -y install libunwind-dev scorep
