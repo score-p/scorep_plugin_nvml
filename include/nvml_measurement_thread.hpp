@@ -43,6 +43,7 @@ public:
         stop = false;
 
         while (!stop) {
+            auto until = std::chrono::steady_clock::now() + interval;
             try {
                 std::lock_guard<std::mutex> lock(m_mutex);
                 for (auto& metric_it : measurements) {
@@ -55,7 +56,7 @@ public:
             catch (scorep::exception::null_pointer& e) {
                 logging::warn() << "Score-P Clock not set.";
             }
-            std::this_thread::sleep_for(interval);
+            std::this_thread::sleep_until(until);
         }
     }
 
@@ -64,10 +65,11 @@ public:
         stop = false;
 
         while (!stop) {
+            auto until = std::chrono::steady_clock::now() + interval;
             do_sampling_measurement();
             last = system_clock_t::now();
 
-            std::this_thread::sleep_for(interval);
+            std::this_thread::sleep_until(until);
         }
         do_sampling_measurement(); // on big intervals many points would be lost
     }
