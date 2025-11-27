@@ -275,6 +275,36 @@ public:
     }
 };
 
+class Gpu_Power_Instant : public Nvml_Metric {
+public:
+    Gpu_Power_Instant(std::string name_ = "")
+    {
+        name = name_;
+        desc = "GPU Instant Power";
+        unit = "mW";
+        type = metric_measure_type::ABS;
+        datatype = metric_datatype::UINT;
+#ifndef NVML_FI_DEV_POWER_INSTANT
+        throw std::runtime_error("NVML_FI_DEV_POWER_INSTANT not available in this NVML version.");
+#endif
+    }
+    unsigned int get_value(nvmlDevice_t& device)
+    {
+#ifdef NVML_FI_DEV_POWER_INSTANT
+        nvmlFieldValue_t field_value;
+        field_value.fieldId = NVML_FI_DEV_POWER_INSTANT;
+        field_value.scopeId = 0;
+        nvmlDeviceGetFieldValues(device, 1, &field_value);
+        check_nvml_return(field_value.nvmlReturn, name);
+
+        value = field_value.value.ulVal;
+#else
+        value = 0;
+#endif
+        return value;
+    }
+};
+
 class Pcie_Send : public Nvml_Metric {
 public:
     Pcie_Send(std::string name_ = "")
@@ -624,6 +654,9 @@ Nvml_Metric* metric_name_2_nvml_function(std::string metric_name)
     }
     else if (metric_name.compare("module_power_instant") == 0) {
         metric = new Module_Power_Instant(metric_name);
+    }
+    else if (metric_name.compare("gpu_power_instant") == 0) {
+        metric = new Gpu_Power_Instant(metric_name);
     }
     else {
         std::runtime_error("Unknown metric: " + metric_name);

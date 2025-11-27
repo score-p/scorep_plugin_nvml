@@ -77,6 +77,7 @@ The a sync plugin polls devices on trace events (e.g. `ENTER` and `LEAVE`) to ge
 - `freq_mem`
 - `freq_graphics`
 - `module_power_instant`
+- `gpu_power_instant`
 
 ## Developer note 
 Current `nvml.h` can be found under 
